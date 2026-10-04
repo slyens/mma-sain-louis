@@ -1,37 +1,66 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MMA Saint-Louis — Club MMA</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-<header class="top">
-  <a class="brand" href="index.html"><span>MSL</span><b>MMA<br>SAINT-LOUIS</b></a>
-  <button class="menu" onclick="toggleMenu()">☰</button>
-  <nav id="nav"><a href="#club">Le club</a><a href="#training">Entraînements</a><a href="#contact">Contact</a><a class="navbtn" href="auth.html">Mon espace</a></nav>
-</header>
-<main>
-<section class="hero">
-  <div class="hero-content">
-    <p class="eyebrow">MMA • DISCIPLINE • RESPECT • PERFORMANCE</p>
-    <h1>FORGE TON<br><em>COMBAT.</em></h1>
-    <p class="lead">Rejoins MMA Saint-Louis et progresse dans un club où technique, condition physique et respect sont au centre de chaque entraînement.</p>
-    <div class="actions"><a class="btn red" href="register.html">S'inscrire au club</a><a class="btn ghost" href="#club">Découvrir le club ↓</a></div>
-    <div class="stats"><div><strong>01</strong><small>Club MMA</small></div><div><strong>100%</strong><small>Passion</small></div><div><strong>7/7</strong><small>Motivation</small></div></div>
-  </div>
-  <div class="fighter-card"><div class="circle">🥊</div><div class="fight-label">SAINT-LOUIS<br><span>GRAND EST</span></div></div>
-</section>
-<section id="club" class="section">
-  <p class="eyebrow">NOTRE PHILOSOPHIE</p><h2>Plus qu'un sport.<br><span>Une mentalité.</span></h2>
-  <div class="grid3"><article><b>01</b><h3>Technique</h3><p>Travail du striking, grappling, lutte et déplacements avec une progression adaptée.</p></article><article><b>02</b><h3>Condition</h3><p>Développe ton cardio, ta force, ta mobilité et ton explosivité.</p></article><article><b>03</b><h3>Respect</h3><p>Un environnement sérieux, bienveillant et basé sur le respect du partenaire.</p></article></div>
-</section>
-<section id="training" class="section dark"><p class="eyebrow">PROGRAMME</p><h2>Les entraînements</h2>
-<div class="schedule"><div><span>LUNDI</span><b>MMA — Technique</b><small>18:30 — 20:00</small></div><div><span>MERCREDI</span><b>MMA — Combat</b><small>18:30 — 20:00</small></div><div><span>VENDREDI</span><b>Condition physique</b><small>18:30 — 20:00</small></div><div><span>SAMEDI</span><b>Grappling</b><small>10:00 — 11:30</small></div></div>
-</section>
-<section class="cta"><p class="eyebrow">PRÊT À COMMENCER ?</p><h2>Entre dans la cage.<br><span>Pas dans le doute.</span></h2><a class="btn red" href="register.html">Créer mon compte</a></section>
-<section id="contact" class="contact"><div><p class="eyebrow">CONTACT</p><h2>MMA Saint-Louis</h2><p>Une question sur les inscriptions ou les entraînements ? Contacte le club.</p></div><div class="contactbox"><p>📍 Saint-Louis, Grand Est</p><p>📞 Téléphone du club</p><p>✉️ Email du club</p></div></section>
-</main>
-<footer>© 2026 MMA Saint-Louis — Tous droits réservés</footer>
-<script src="app.js"></script>
-</body></html>
+from pathlib import Path
+import os, zipfile, shutil, re
+
+src=Path("/mnt/data/mma-saint-louis-pro")
+root=Path("/mnt/data/MMA-Saint-Louis-FINAL")
+if root.exists(): shutil.rmtree(root)
+shutil.copytree(src, root)
+
+# Navigation
+index=root/"index.html"
+html=index.read_text(encoding="utf-8")
+html=re.sub(r'<header class="top">.*?</header>', '''<header class="top">
+<a class="brand" href="index.html"><span>MSL</span><b>MMA<br>SAINT-LOUIS</b></a>
+<button class="menu" onclick="toggleMenu()">☰</button>
+<nav id="nav">
+<a href="index.html">Home</a><a href="index.html#disciplines">Disciplines</a><a href="timetable.html">Timetable</a>
+<a href="index.html#fees">Fees</a><a href="index.html#equipment">Equipment</a><a href="index.html#team">Team</a>
+<a href="register.html">Register</a><a href="dashboard.html">♙ Member area</a>
+<span class="langs"><a href="#" class="active">FR</a><a href="#">EN</a><a href="#">DE</a></span>
+</nav></header>''', html, flags=re.S)
+html=html.replace('<section id="club" class="section">','<section id="disciplines" class="section">')
+if 'id="fees"' not in html:
+    addition='''<section id="fees" class="section info-section"><p class="eyebrow">MEMBERSHIP</p><h2>Les tarifs</h2>
+<div class="info-cards"><div><b>ESSAI</b><strong>Sur demande</strong><span>Découvre le club avant de t'inscrire.</span></div>
+<div><b>MEMBRE</b><strong>Tarif club</strong><span>Accès aux entraînements selon ton inscription.</span></div>
+<div><b>CONTACT</b><strong>Tarifs actuels</strong><span>Contacte directement le club.</span></div></div></section>
+<section id="equipment" class="section dark info-section"><p class="eyebrow">ÉQUIPEMENT</p><h2>Prépare ton sac.</h2>
+<div class="equipment-list"><span>🥊 Gants MMA / boxe</span><span>🦷 Protège-dents</span><span>🩳 Tenue de sport</span><span>🧤 Protections adaptées</span></div></section>
+<section id="team" class="section info-section"><p class="eyebrow">L'ÉQUIPE</p><h2>Des coachs pour progresser.</h2><p class="lead">Une équipe qui t'accompagne dans ta progression.</p></section>'''
+    html=html.replace('<section class="cta">',addition+'<section class="cta">')
+index.write_text(html,encoding="utf-8")
+
+# Timetable
+timetable='''<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Timetable — MMA Saint-Louis</title><link rel="stylesheet" href="style.css"></head><body>
+<header class="top"><a class="brand" href="index.html"><span>MSL</span><b>MMA<br>SAINT-LOUIS</b></a><button class="menu" onclick="toggleMenu()">☰</button>
+<nav id="nav"><a href="index.html">Home</a><a href="index.html#disciplines">Disciplines</a><a class="current" href="timetable.html">Timetable</a><a href="index.html#fees">Fees</a><a href="index.html#equipment">Equipment</a><a href="index.html#team">Team</a><a href="register.html">Register</a><a href="dashboard.html">♙ Member area</a><span class="langs"><a href="#">FR</a><a class="active" href="#">EN</a><a href="#">DE</a></span></nav></header>
+<main class="timetable-page"><p class="eyebrow">WEEKLY PROGRAM</p><h1>Timetable</h1><p class="lead">Planning hebdomadaire des entraînements MMA Saint-Louis.</p>
+<div class="table-scroll"><div class="tablewrap">
+<div class="times"><b>TIME</b><span>10:00</span><span>11:00</span><span>12:00</span><span>13:00</span><span>14:00</span><span>15:00</span><span>16:00</span><span>17:00</span><span>18:00</span><span>19:00</span><span>20:00</span><span>21:00</span></div>
+<div class="day"><h3>Monday</h3><div class="daybody"><div class="class redclass c19"><b>Striking — technique</b><small>19:00–21:00</small></div></div></div>
+<div class="day"><h3>Tuesday</h3><div class="daybody"><div class="class orangeclass c2030"><b>Striking — hands and guard</b><small>20:30–22:00</small></div></div></div>
+<div class="day"><h3>Wednesday</h3><div class="daybody"><div class="class blueclass c18"><b>Kids</b><small>18:00–19:00</small></div><div class="class redclass c19b"><b>Adult MMA</b><small>19:00–21:00</small></div></div></div>
+<div class="day"><h3>Thursday</h3><div class="daybody empty">No classes</div></div>
+<div class="day"><h3>Friday</h3><div class="daybody"><div class="class blueclass c18"><b>Kids</b><small>18:00–19:00</small></div><div class="class purpleclass c19b"><b>Grappling / BJJ</b><small>19:00–21:00</small></div></div></div>
+<div class="day"><h3>Saturday</h3><div class="daybody empty">No classes</div></div>
+<div class="day"><h3>Sunday</h3><div class="daybody"><div class="class pinkclass c1030"><b>Muay Thai</b><small>10:30–12:30</small></div><div class="class greenclass c1030b"><b>Veterans</b><small>10:30–12:30</small></div><div class="class lavenderclass c16"><b>Women's class</b><small>16:00–18:00</small></div></div></div>
+</div></div></div></main><footer>© 2026 MMA Saint-Louis</footer><script src="app.js"></script></body></html>'''
+(root/"timetable.html").write_text(timetable,encoding="utf-8")
+
+css=root/"style.css"
+s=css.read_text(encoding="utf-8")
+s += '''
+.current{color:#fff!important}.langs{display:flex;gap:8px;align-items:center}.langs a{padding:9px 8px}.langs .active{background:#fff;color:#111!important;border-radius:5px}
+.info-section{border-top:1px solid #1c1c1c}.info-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.info-cards div{background:#111;border:1px solid #292929;padding:25px}.info-cards b,.info-cards strong,.info-cards span{display:block}.info-cards b{color:#e51d2a;font-size:11px;letter-spacing:2px}.info-cards strong{font-size:22px;margin:15px 0}.info-cards span{color:#888;line-height:1.5}.equipment-list{display:flex;flex-wrap:wrap;gap:12px}.equipment-list span{padding:18px 22px;background:#171717;border:1px solid #292929;border-radius:5px}
+.timetable-page{padding:70px 5% 90px;max-width:1450px;margin:auto}.timetable-page h1{font-family:Anton,Impact,sans-serif;font-size:70px;margin:10px 0}.table-scroll{overflow-x:auto}.tablewrap{display:grid;grid-template-columns:70px repeat(7,minmax(110px,1fr));gap:10px;margin-top:50px;min-width:900px}.times{display:grid;grid-template-rows:40px repeat(12,54px);color:#777;text-align:right;padding-right:8px}.times b{font-size:11px;color:#444}.times span{font-family:monospace;font-size:14px;padding-top:5px}.day h3{text-align:center;font-size:17px;margin:0 0 12px}.daybody{height:648px;border:1px solid #ddd;background:repeating-linear-gradient(to bottom,#fff 0,#fff 53px,#e8e8e8 54px);border-radius:10px;position:relative;color:#777}.daybody.empty{display:flex;align-items:center;justify-content:center;font-size:14px}.class{position:absolute;left:6px;right:6px;border:1px solid;border-radius:8px;padding:8px 9px;color:#111;overflow:hidden}.class b{display:block;font-size:14px;line-height:1.25}.class small{display:block;font-family:monospace;font-size:13px;margin-top:8px}.redclass{background:#ffe9e5;border-color:#ffb5aa}.orangeclass{background:#fff0df;border-color:#ffbf86}.blueclass{background:#e3f1ff;border-color:#8bc4ff}.purpleclass{background:#e9e8ff;border-color:#aaa7ff}.pinkclass{background:#ffe7ea;border-color:#ffadb8}.greenclass{background:#e2f8ed;border-color:#8ed7b6}.lavenderclass{background:#eee9ff;border-color:#c2b4ff}.c18{top:414px;height:68px}.c19,.c19b{top:479px;height:105px}.c2030{top:560px;height:112px}.c1030{top:66px;height:88px;right:50%}.c1030b{top:66px;height:88px;left:50%}.c16{top:334px;height:101px}
+@media(max-width:800px){.info-cards{grid-template-columns:1fr}.timetable-page{padding-left:20px;padding-right:20px}}
+'''
+css.write_text(s,encoding="utf-8")
+
+zip_path="/mnt/data/MMA-Saint-Louis-FINAL.zip"
+with zipfile.ZipFile(zip_path,"w",zipfile.ZIP_DEFLATED) as z:
+    for folder,_,names in os.walk(root):
+        for name in names:
+            p=os.path.join(folder,name)
+            z.write(p,os.path.relpath(p,root))
+print(zip_path)
