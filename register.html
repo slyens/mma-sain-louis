@@ -1,0 +1,13 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Inscription — MMA Saint-Louis</title><link rel="stylesheet" href="style.css"></head><body class="authbody">
+<div class="auth wide"><a class="back" href="index.html">← Retour au site</a><div class="authlogo">🥊 <b>MMA SAINT-LOUIS</b></div><h1>Rejoins le club.</h1><p>Crée ton espace membre en quelques étapes.</p>
+<form id="registerForm" class="formgrid">
+<label>Nom d'utilisateur<input id="username" required placeholder="ex : slyens"></label>
+<label>Nom complet<input id="name" required placeholder="Prénom Nom"></label>
+<label>Email<input id="email" type="email" required placeholder="ton@email.com"></label>
+<label>Téléphone<input id="phone" type="tel" required placeholder="+33 6 00 00 00 00"></label>
+<label>Mot de passe<input id="password" type="password" minlength="8" required></label>
+<label>Confirmer le mot de passe<input id="confirm" type="password" minlength="8" required></label>
+<label class="file">📷 Photo de profil<input id="avatar" type="file" accept="image/*" required><small>JPG, PNG ou WEBP</small></label>
+<label class="file">📄 Certificat médical<input id="medical" type="file" accept="image/*,.pdf" required><small>Image ou PDF</small></label>
+<div class="check"><input id="terms" type="checkbox" required> J'accepte le règlement du club et confirme que les informations fournies sont exactes.</div>
+<button class="btn red full" type="submit">Créer mon compte</button></form><p id="msg" class="msg"></p><p>Déjà membre ? <a href="auth.html">Se connecter</a></p></div><script src="app.js"></script></body></html>

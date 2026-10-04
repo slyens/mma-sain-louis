@@ -1,0 +1,1 @@
+Place ici les images du club, logos et photos autorisées.
